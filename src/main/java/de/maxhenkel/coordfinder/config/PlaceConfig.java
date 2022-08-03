@@ -36,6 +36,16 @@ public class PlaceConfig extends PropertyConfig {
         save();
     }
 
+    public void removePlace(String name) {
+        places.remove(name);
+        properties.remove(name);
+        save();
+    }
+
+    public Map<String, Location> getPlaces() {
+        return places;
+    }
+
     public static boolean isValidPlaceName(String name) {
         return PLACE_NAME_REGEX.matcher(name).matches();
     }

@@ -23,6 +23,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Map;
+import java.util.Set;
+
 public class CoordCommands {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext ctx, net.minecraft.commands.Commands.CommandSelection environment) {
@@ -71,6 +74,25 @@ public class CoordCommands {
                 }))
         );
 
+        coordsBuilder.then(Commands.literal("removeplace")
+                .then(Commands.argument("name", StringArgumentType.string()).executes(context -> {
+                    String placeName = StringArgumentType.getString(context, "name");
+                    if (!PlaceConfig.isValidPlaceName(placeName)) {
+                        context.getSource().sendSuccess(Component.literal("Invalid place name ")
+                                .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
+                                .append(Component.literal(".")
+                                ), false);
+                        return 1;
+                    }
+                    CoordFinder.PLACE_CONFIG.removePlace(placeName);
+                    context.getSource().sendSuccess(Component.literal("Successfully removed ")
+                            .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
+                            .append(Component.literal(".")
+                            ), false);
+                    return 1;
+                }))
+        );
+
         coordsBuilder.then(Commands.literal("place")
                 .then(Commands.argument("name", StringArgumentType.string()).executes(context -> {
                     String placeName = StringArgumentType.getString(context, "name");
@@ -94,6 +116,23 @@ public class CoordCommands {
 
                     return 1;
                 })));
+
+        coordsBuilder.then(Commands.literal("listplaces").executes(context -> {
+            Set<Map.Entry<String, Location>> entries = CoordFinder.PLACE_CONFIG.getPlaces().entrySet();
+            for (Map.Entry<String, Location> entry : entries) {
+                context.getSource().sendSuccess(
+                        Component.literal("Place ")
+                                .append(Component.literal(entry.getKey()).withStyle(ChatFormatting.GREEN))
+                                .append(" is located at ")
+                                .append(fromLocation(entry.getValue()))
+                        , false);
+            }
+            if (entries.size() <= 0) {
+                context.getSource().sendSuccess(Component.literal("There are no places"), false);
+            }
+
+            return 1;
+        }));
 
         coordsBuilder.then(Commands.literal("hide").executes(context -> {
             ServerPlayer player = context.getSource().getPlayerOrException();
