@@ -30,7 +30,7 @@ public record Location(ResourceLocation dimension, BlockPos position) {
     }
 
     public static Location fromPlayer(ServerPlayer player) {
-        return new Location(player.getLevel().dimension().location(), player.blockPosition());
+        return new Location(player.level().dimension().location(), player.blockPosition());
     }
 
     @Override

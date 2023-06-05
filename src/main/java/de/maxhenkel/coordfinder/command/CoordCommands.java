@@ -35,11 +35,11 @@ public class CoordCommands {
             ServerPlayer player = EntityArgument.getPlayer(context, "target");
 
             if (CoordFinder.HIDDEN_PLAYERS.getOrDefault(player.getUUID(), false)) {
-                context.getSource().sendSuccess(Component.literal("Player ").append(player.getDisplayName()).append(Component.literal(" is hidden.")), false);
+                context.getSource().sendSuccess(() -> Component.literal("Player ").append(player.getDisplayName()).append(Component.literal(" is hidden.")), false);
                 return 1;
             }
 
-            context.getSource().sendSuccess(Component.literal("Player ")
+            context.getSource().sendSuccess(() -> Component.literal("Player ")
                             .append(player.getDisplayName())
                             .append(Component.literal(" is at "))
                             .append(fromLocation(Location.fromPlayer(player)))
@@ -78,14 +78,14 @@ public class CoordCommands {
                 .then(Commands.argument("name", StringArgumentType.string()).executes(context -> {
                     String placeName = StringArgumentType.getString(context, "name");
                     if (!PlaceConfig.isValidPlaceName(placeName)) {
-                        context.getSource().sendSuccess(Component.literal("Invalid place name ")
+                        context.getSource().sendSuccess(() -> Component.literal("Invalid place name ")
                                 .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                                 .append(Component.literal(".")
                                 ), false);
                         return 1;
                     }
                     CoordFinder.PLACE_CONFIG.removePlace(placeName);
-                    context.getSource().sendSuccess(Component.literal("Successfully removed ")
+                    context.getSource().sendSuccess(() -> Component.literal("Successfully removed ")
                             .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                             .append(Component.literal(".")
                             ), false);
@@ -100,14 +100,14 @@ public class CoordCommands {
                     Location place = CoordFinder.PLACE_CONFIG.getPlace(placeName);
 
                     if (place == null) {
-                        context.getSource().sendSuccess(Component.literal("Place with name ")
+                        context.getSource().sendSuccess(() -> Component.literal("Place with name ")
                                         .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                                         .append(" not found.")
                                 , false);
                         return 1;
                     }
 
-                    context.getSource().sendSuccess(Component.literal("Place ")
+                    context.getSource().sendSuccess(() -> Component.literal("Place ")
                                     .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                                     .append(" is at ")
                                     .append(fromLocation(place))
@@ -120,15 +120,15 @@ public class CoordCommands {
         coordsBuilder.then(Commands.literal("listplaces").executes(context -> {
             Set<Map.Entry<String, Location>> entries = CoordFinder.PLACE_CONFIG.getPlaces().entrySet();
             for (Map.Entry<String, Location> entry : entries) {
-                context.getSource().sendSuccess(
-                        Component.literal("Place ")
-                                .append(Component.literal(entry.getKey()).withStyle(ChatFormatting.GREEN))
-                                .append(" is located at ")
-                                .append(fromLocation(entry.getValue()))
+                context.getSource().sendSuccess(() ->
+                                Component.literal("Place ")
+                                        .append(Component.literal(entry.getKey()).withStyle(ChatFormatting.GREEN))
+                                        .append(" is located at ")
+                                        .append(fromLocation(entry.getValue()))
                         , false);
             }
             if (entries.size() <= 0) {
-                context.getSource().sendSuccess(Component.literal("There are no places"), false);
+                context.getSource().sendSuccess(() -> Component.literal("There are no places"), false);
             }
 
             return 1;
@@ -137,14 +137,14 @@ public class CoordCommands {
         coordsBuilder.then(Commands.literal("hide").executes(context -> {
             ServerPlayer player = context.getSource().getPlayerOrException();
             CoordFinder.HIDDEN_PLAYERS.put(player.getUUID(), true);
-            context.getSource().sendSuccess(Component.literal("Coordinates successfully hidden. You will stay hidden until the next server restart."), false);
+            context.getSource().sendSuccess(() -> Component.literal("Coordinates successfully hidden. You will stay hidden until the next server restart."), false);
             return 1;
         }));
 
         coordsBuilder.then(Commands.literal("unhide").executes(context -> {
             ServerPlayer player = context.getSource().getPlayerOrException();
             CoordFinder.HIDDEN_PLAYERS.remove(player.getUUID());
-            context.getSource().sendSuccess(Component.literal("Coordinates successfully unhidden."), false);
+            context.getSource().sendSuccess(() -> Component.literal("Coordinates successfully unhidden."), false);
             return 1;
         }));
 
@@ -168,28 +168,28 @@ public class CoordCommands {
 
     private static void setPlace(CommandContext<CommandSourceStack> context, String placeName, ServerLevel dimension, Vec3 location) {
         if (!PlaceConfig.isValidPlaceName(placeName)) {
-            context.getSource().sendSuccess(
-                    Component.literal("Invalid place name. Valid characters are ")
-                            .append(Component.literal("A-Z").withStyle(ChatFormatting.GREEN))
-                            .append(", ")
-                            .append(Component.literal("a-z").withStyle(ChatFormatting.GREEN))
-                            .append(", ")
-                            .append(Component.literal("-").withStyle(ChatFormatting.GREEN))
-                            .append(" and ")
-                            .append(Component.literal("_").withStyle(ChatFormatting.GREEN))
-                            .append(".")
+            context.getSource().sendSuccess(() ->
+                            Component.literal("Invalid place name. Valid characters are ")
+                                    .append(Component.literal("A-Z").withStyle(ChatFormatting.GREEN))
+                                    .append(", ")
+                                    .append(Component.literal("a-z").withStyle(ChatFormatting.GREEN))
+                                    .append(", ")
+                                    .append(Component.literal("-").withStyle(ChatFormatting.GREEN))
+                                    .append(" and ")
+                                    .append(Component.literal("_").withStyle(ChatFormatting.GREEN))
+                                    .append(".")
                     , false);
             return;
         }
         Location loc = new Location(dimension.dimension().location(), new BlockPos((int) location.x, (int) location.y, (int) location.z));
         CoordFinder.PLACE_CONFIG.setPlace(placeName, loc);
 
-        context.getSource().sendSuccess(
-                Component.literal("Successfully set the location of ")
-                        .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
-                        .append(" to ")
-                        .append(fromLocation(loc))
-                        .append(".")
+        context.getSource().sendSuccess(() ->
+                        Component.literal("Successfully set the location of ")
+                                .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
+                                .append(" to ")
+                                .append(fromLocation(loc))
+                                .append(".")
                 , false);
     }
 

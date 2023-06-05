@@ -1,6 +1,6 @@
 package de.maxhenkel.coordfinder.config;
 
-import de.maxhenkel.configbuilder.PropertyConfig;
+import de.maxhenkel.configbuilder.CommentedPropertyConfig;
 import de.maxhenkel.coordfinder.Location;
 
 import javax.annotation.Nullable;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class PlaceConfig extends PropertyConfig {
+public class PlaceConfig extends CommentedPropertyConfig {
 
     public static final Pattern PLACE_NAME_REGEX = Pattern.compile("^[a-zA-Z_-]{1,32}$");
 
@@ -17,10 +17,10 @@ public class PlaceConfig extends PropertyConfig {
 
     public PlaceConfig(Path path) {
         super(path);
-        Map<String, Object> entries = getEntries();
+        Map<String, String> entries = getEntries();
         places = new HashMap<>();
-        for (Map.Entry<String, Object> entry : entries.entrySet()) {
-            Location location = Location.fromString(entry.getValue().toString());
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            Location location = Location.fromString(entry.getValue());
             places.put(entry.getKey(), location);
         }
     }
