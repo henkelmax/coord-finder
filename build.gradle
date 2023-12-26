@@ -16,3 +16,8 @@ processResources {
                 'fabric_api_dependency_breaks': fabric_api_dependency_breaks
     }
 }
+
+dependencies{
+    include(modImplementation("maven.modrinth:admiral:${admiral_version}+fabric"))
+    modImplementation "me.lucko:fabric-permissions-api:${fabric_permission_api_version}"
+}

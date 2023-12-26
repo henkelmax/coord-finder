@@ -1,1 +1,2 @@
 - Updated dependencies
+- Added support for fabric-permissions-api
