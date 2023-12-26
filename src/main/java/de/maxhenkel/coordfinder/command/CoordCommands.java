@@ -30,11 +30,11 @@ public class CoordCommands {
     @Command("player")
     public void playerCoords(CommandContext<CommandSourceStack> context, @Name("player") ServerPlayer player) {
         if (CoordFinder.HIDDEN_PLAYERS.getOrDefault(player.getUUID(), false)) {
-            context.getSource().sendSuccess(() -> Component.literal("Player ").append(player.getDisplayName()).append(Component.literal(" is hidden.")), false);
+            context.getSource().sendSuccess(Component.literal("Player ").append(player.getDisplayName()).append(Component.literal(" is hidden.")), false);
             return;
         }
 
-        context.getSource().sendSuccess(() -> Component.literal("Player ")
+        context.getSource().sendSuccess(Component.literal("Player ")
                         .append(player.getDisplayName())
                         .append(Component.literal(" is at "))
                         .append(fromLocation(Location.fromPlayer(player)))
@@ -52,14 +52,14 @@ public class CoordCommands {
     @Command("removeplace")
     public void removePlace(CommandContext<CommandSourceStack> context, @Name("name") String placeName) {
         if (!PlaceConfig.isValidPlaceName(placeName)) {
-            context.getSource().sendSuccess(() -> Component.literal("Invalid place name ")
+            context.getSource().sendSuccess(Component.literal("Invalid place name ")
                     .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                     .append(Component.literal(".")
                     ), false);
             return;
         }
         CoordFinder.PLACE_CONFIG.removePlace(placeName);
-        context.getSource().sendSuccess(() -> Component.literal("Successfully removed ")
+        context.getSource().sendSuccess(Component.literal("Successfully removed ")
                 .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                 .append(Component.literal(".")
                 ), false);
@@ -71,14 +71,14 @@ public class CoordCommands {
         Location place = CoordFinder.PLACE_CONFIG.getPlace(placeName);
 
         if (place == null) {
-            context.getSource().sendSuccess(() -> Component.literal("Place with name ")
+            context.getSource().sendSuccess(Component.literal("Place with name ")
                             .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                             .append(" not found.")
                     , false);
             return;
         }
 
-        context.getSource().sendSuccess(() -> Component.literal("Place ")
+        context.getSource().sendSuccess(Component.literal("Place ")
                         .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
                         .append(" is at ")
                         .append(fromLocation(place))
@@ -91,15 +91,14 @@ public class CoordCommands {
     public void listPlaces(CommandContext<CommandSourceStack> context) {
         Set<Map.Entry<String, Location>> entries = CoordFinder.PLACE_CONFIG.getPlaces().entrySet();
         for (Map.Entry<String, Location> entry : entries) {
-            context.getSource().sendSuccess(() ->
-                            Component.literal("Place ")
-                                    .append(Component.literal(entry.getKey()).withStyle(ChatFormatting.GREEN))
-                                    .append(" is located at ")
-                                    .append(fromLocation(entry.getValue()))
+            context.getSource().sendSuccess(Component.literal("Place ")
+                            .append(Component.literal(entry.getKey()).withStyle(ChatFormatting.GREEN))
+                            .append(" is located at ")
+                            .append(fromLocation(entry.getValue()))
                     , false);
         }
         if (entries.size() <= 0) {
-            context.getSource().sendSuccess(() -> Component.literal("There are no places"), false);
+            context.getSource().sendSuccess(Component.literal("There are no places"), false);
         }
     }
 
@@ -108,7 +107,7 @@ public class CoordCommands {
     public void hide(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         CoordFinder.HIDDEN_PLAYERS.put(player.getUUID(), true);
-        context.getSource().sendSuccess(() -> Component.literal("Coordinates successfully hidden. You will stay hidden until the next server restart."), false);
+        context.getSource().sendSuccess(Component.literal("Coordinates successfully hidden. You will stay hidden until the next server restart."), false);
     }
 
     @RequiresPermission("coordfinder.hide")
@@ -116,7 +115,7 @@ public class CoordCommands {
     public void unhide(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         CoordFinder.HIDDEN_PLAYERS.remove(player.getUUID());
-        context.getSource().sendSuccess(() -> Component.literal("Coordinates successfully unhidden."), false);
+        context.getSource().sendSuccess(Component.literal("Coordinates successfully unhidden."), false);
     }
 
     public static Component fromLocation(Location location) {
@@ -136,28 +135,26 @@ public class CoordCommands {
 
     private static void setPlace(CommandContext<CommandSourceStack> context, String placeName, ServerLevel dimension, Vec3 location) {
         if (!PlaceConfig.isValidPlaceName(placeName)) {
-            context.getSource().sendSuccess(() ->
-                            Component.literal("Invalid place name. Valid characters are ")
-                                    .append(Component.literal("A-Z").withStyle(ChatFormatting.GREEN))
-                                    .append(", ")
-                                    .append(Component.literal("a-z").withStyle(ChatFormatting.GREEN))
-                                    .append(", ")
-                                    .append(Component.literal("-").withStyle(ChatFormatting.GREEN))
-                                    .append(" and ")
-                                    .append(Component.literal("_").withStyle(ChatFormatting.GREEN))
-                                    .append(".")
+            context.getSource().sendSuccess(Component.literal("Invalid place name. Valid characters are ")
+                            .append(Component.literal("A-Z").withStyle(ChatFormatting.GREEN))
+                            .append(", ")
+                            .append(Component.literal("a-z").withStyle(ChatFormatting.GREEN))
+                            .append(", ")
+                            .append(Component.literal("-").withStyle(ChatFormatting.GREEN))
+                            .append(" and ")
+                            .append(Component.literal("_").withStyle(ChatFormatting.GREEN))
+                            .append(".")
                     , false);
             return;
         }
         Location loc = new Location(dimension.dimension().location(), new BlockPos((int) location.x, (int) location.y, (int) location.z));
         CoordFinder.PLACE_CONFIG.setPlace(placeName, loc);
 
-        context.getSource().sendSuccess(() ->
-                        Component.literal("Successfully set the location of ")
-                                .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
-                                .append(" to ")
-                                .append(fromLocation(loc))
-                                .append(".")
+        context.getSource().sendSuccess(Component.literal("Successfully set the location of ")
+                        .append(Component.literal(placeName).withStyle(ChatFormatting.GREEN))
+                        .append(" to ")
+                        .append(fromLocation(loc))
+                        .append(".")
                 , false);
     }
 
