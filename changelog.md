@@ -1,2 +1,3 @@
 - Updated dependencies
 - Added support for fabric-permissions-api
+- Added mod icon
