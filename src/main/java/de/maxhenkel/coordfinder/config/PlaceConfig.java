@@ -1,5 +1,6 @@
 package de.maxhenkel.coordfinder.config;
 
+import de.maxhenkel.configbuilder.CommentedProperties;
 import de.maxhenkel.configbuilder.CommentedPropertyConfig;
 import de.maxhenkel.coordfinder.Location;
 
@@ -16,7 +17,9 @@ public class PlaceConfig extends CommentedPropertyConfig {
     private final Map<String, Location> places;
 
     public PlaceConfig(Path path) {
-        super(path);
+        super(new CommentedProperties(false));
+        this.path = path;
+        reload();
         Map<String, String> entries = getEntries();
         places = new HashMap<>();
         for (Map.Entry<String, String> entry : entries.entrySet()) {
