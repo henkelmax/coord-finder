@@ -14,7 +14,10 @@ public record Location(ResourceLocation dimension, BlockPos position) {
             return null;
         }
 
-        ResourceLocation dimension = new ResourceLocation(split[0]);
+        ResourceLocation dimension = ResourceLocation.tryParse(split[0]);
+        if (dimension == null) {
+            return null;
+        }
 
         int x, y, z;
         try {
