@@ -77,7 +77,8 @@ public class CoordFinderPermissionManager implements PermissionManager<CommandSo
             if (player == null) {
                 return false;
             }
-            TriState permissionValue = Permissions.getPermissionValue(player, permission);
+            //TODO Update fabric permissions api
+            TriState permissionValue = TriState.DEFAULT; //Permissions.getPermissionValue(player, permission);
             switch (permissionValue) {
                 case DEFAULT:
                     return type.hasPermission(player);
