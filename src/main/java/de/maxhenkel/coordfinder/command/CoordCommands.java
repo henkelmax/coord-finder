@@ -127,8 +127,8 @@ public class CoordCommands {
                                 .withStyle((style) -> {
                                     return style
 
-                                            .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/execute in %s run tp @s %s %s %s".formatted(location.dimension(), location.position().getX(), location.position().getY(), location.position().getZ())))
-                                            .withHoverEvent(new HoverEvent(net.minecraft.network.chat.HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.coordinates.tooltip")));
+                                            .withClickEvent(new ClickEvent.SuggestCommand("/execute in %s run tp @s %s %s %s".formatted(location.dimension(), location.position().getX(), location.position().getY(), location.position().getZ())))
+                                            .withHoverEvent(new HoverEvent.ShowText(Component.translatable("chat.coordinates.tooltip")));
                                 })
                 )
                 .withStyle(ChatFormatting.GREEN);
