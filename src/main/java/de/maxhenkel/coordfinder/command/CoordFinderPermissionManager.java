@@ -102,7 +102,7 @@ public class CoordFinderPermissionManager implements PermissionManager<CommandSo
             return switch (this) {
                 case EVERYONE -> true;
                 case NOONE -> false;
-                case OPS -> player != null && player.hasPermissions(player.getServer().getOperatorUserPermissionLevel());
+                case OPS -> player != null && player.hasPermissions(player.level().getServer().operatorUserPermissionLevel());
             };
         }
 
